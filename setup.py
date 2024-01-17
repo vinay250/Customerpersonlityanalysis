@@ -20,5 +20,6 @@ setup(
     author='vinay',
     author_email='vinayakavirat008@gmail.com',
     install_requires=["pandas","numpy","scikit-learn","matplotlib"],
-    packages=find_packages()
+    packages=find_packages(),
+    install_requirs=["pandas","numpy","scikit-learn","matplotlib","seaborn","ipykernel"]
 )
