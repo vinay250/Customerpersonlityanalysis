@@ -3,6 +3,8 @@ import sys
 from source.Personalityanalysis.logger import logging
 from source.Personalityanalysis.exception import customexception
 import pandas as pd
+from source.Personalityanalysis.components.data_transformation import DataTransformation
+
 
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
@@ -49,5 +51,12 @@ if __name__=="__main__":
     obj=DataIngestion()
     train_data,test_data=obj.initiate_data_ingestion()
 
+    #Specify the path to your data file
+    data_path = 'E:/CustomerPersonalityAnalysis/artifacts/train.csv'
 
+    # Initialize DataTransformation
+    data_transformation_instance = DataTransformation()
+
+    # Run data transformation
+    data_transformation_instance.run_data_transformation(data_path)
 
