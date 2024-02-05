@@ -5,7 +5,7 @@ from source.Personalityanalysis.logger import logging
 from source.Personalityanalysis.exception import customexception
 import pandas as pd
 from source.Personalityanalysis.components.data_transformation import DataTransformation
-from source.Personalityanalysis.components.model_trainer import ModelTrainer
+from source.Personalityanalysis.components.model_trainer import run_model_trainer
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
@@ -72,8 +72,5 @@ if __name__ == "__main__":
     # Run data transformation
     data_transformation_instance.run_data_transformation(data_path)
 
-    # Initialize ModelTrainer
-    model_trainer = ModelTrainer(data_transformation_instance)
-
     # Run the model trainer
-    model_trainer.run_model_trainer(data_path)
+    run_model_trainer(data_path)

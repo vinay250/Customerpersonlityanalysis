@@ -1,15 +1,19 @@
+# model_trainer.py
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
-import joblib  # Update this import
-from data_transformation import DataTransformation
-
-
-
+import joblib
+import logging  # Import the logging module
+from source.Personalityanalysis.components.data_transformation import DataTransformation
 
 def run_model_trainer(data_path):
     try:
+        # Initialize logging
+        logging.basicConfig(filename='E:/CustomerPersonalityAnalysis/logs/model_trainer.log',
+                            level=logging.INFO,
+                            format='%(asctime)s - %(levelname)s - %(message)s')
+
         # Initialize DataTransformation
         data_transformation_instance = DataTransformation()
 
@@ -32,22 +36,21 @@ def run_model_trainer(data_path):
         model = RandomForestClassifier()
         model.fit(X_train, y_train)
 
-        # Model Evaluation
-        y_pred = model.predict(X_test)
-        accuracy = accuracy_score(y_test, y_pred)
-        print(f'Accuracy: {accuracy:.2f}')
-
-        # Classification Report
-        print('Classification Report:')
-        print(classification_report(y_test, y_pred))
-
-        # Save the trained model
+        # Save the trained model and feature names
         model_path = 'E:/CustomerPersonalityAnalysis/artifacts/trained_model.pkl'
         joblib.dump(model, model_path)
-        print(f'Trained model saved at: {model_path}')
+
+        # Save feature names
+        feature_names_path = 'E:/CustomerPersonalityAnalysis/artifacts/feature_names.pkl'
+        joblib.dump(list(X_train.columns), feature_names_path)
+
+        # Log the information
+        logging.info(f'Trained model saved at: {model_path}')
+        logging.info(f'Feature names saved at: {feature_names_path}')
 
     except Exception as e:
-        print(f"Exception occurred in the run_model_trainer: {str(e)}")
+        # Log the exception
+        logging.exception(f"Exception occurred in the run_model_trainer: {str(e)}")
 
 if __name__ == "__main__":
     # Specify the path to your data file
