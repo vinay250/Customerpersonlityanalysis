@@ -72,24 +72,31 @@ class DataTransformation:
                     transformers=[
                         ('num', numerical_transformer, numerical_features),
                         ('cat', categorical_transformer, categorical_features)
-                    ])
+                    ],
+                    remainder='passthrough'  # Include non-transformed columns
+                )
             else:
                 # If no categorical features, use only numerical transformers
                 preprocessor = numerical_transformer
 
-            # Apply transformations
             transformed_data = preprocessor.fit_transform(data)
+
+            if transformed_data is None:
+                logging.error("Transformed data is None. Data transformation might not be successful.")
+                logging.error(f"Original data shape: {data.shape}")
+                return None
 
             # Save preprocessor object
             dump(preprocessor, self.data_transformation_config.preprocessor_obj_file_path)
 
-            # Add logging statement
+            # Add logging statements
             logging.info("Preprocessing pickle file saved")
+            logging.info(f"Transformed data shape: {transformed_data.shape}")
 
             return transformed_data
 
         except Exception as e:
-            print("Exception occurred in the data_transformation:", str(e))
+            logging.exception("Exception occurred in the data_transformation")
             raise e
 
     def run_data_transformation(self, data_path):
@@ -104,15 +111,17 @@ class DataTransformation:
             # Convert transformed_data to a Pandas DataFrame
             transformed_df = pd.DataFrame(transformed_data, columns=data.columns)
 
-            # Display basic statistics, visualize, and train/evaluate the model
-            print(transformed_df.describe())
+            # Print the transformed DataFrame
+            print(transformed_df)
+
             # Visualizations...
             self.train_evaluate_model(data)
 
+            return transformed_df  # Make sure to return the DataFrame
         except Exception as e:
             print("Exception occurred in the run_data_transformation:", str(e))
             raise e
-
+    
 if __name__ == "__main__":
     # Specify the path to your data file
     data_path = 'E:/CustomerPersonalityAnalysis/artifacts/train.csv'
