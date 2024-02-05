@@ -1,5 +1,5 @@
 ## Project Title Customer Personality Analysis
-
+![Alt text](https://github.com/vinay250/Customerpersonlityanalysis/blob/main/img/Screenshot%20(286).png)
 # Technologies Machine Learning
 Domain Customer relationship
 
