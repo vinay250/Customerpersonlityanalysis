@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Personality Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000 /* Light gray background color */
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #FF6347; /* White container background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #form-container {
+            margin-top: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea {
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50; /* Green button color */
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        #result-container {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to Customer Personality Analysis!</h1>
+        <p>Enter customer data to analyze their personality:</p>
+        <div id="form-container">
+            <form id="customerForm" onsubmit="analyzeCustomer(); return false;">
+                <!-- Add form fields based on your data -->
+                <!-- Example: -->
+                <label for="customerName">Customer Name:</label>
+                <input type="text" id="customerName" name="customerName" required>
+
+                <label for="productFeedback">Product Feedback:</label>
+                <textarea id="productFeedback" name="productFeedback" rows="4" required></textarea>
+
+                <label for="customerActions">Customer Actions:</label>
+                <input type="text" id="customerActions" name="customerActions" required>
+
+                <button type="submit">Analyze Customer</button>
+            </form>
+        </div>
+        <div id="result-container">
+            <!-- Display analysis results here -->
+        </div>
+    </div>
+    <script>
+        function analyzeCustomer() {
+            // Get form data
+            var customerName = document.getElementById('customerName').value;
+            var productFeedback = document.getElementById('productFeedback').value;
+            var customerActions = document.getElementById('customerActions').value;
+    
+            // Prepare data for AJAX
+            var formData = {
+                customerName: customerName,
+                productFeedback: productFeedback,
+                customerActions: customerActions
+            };
+    
+            // Send data to the backend using AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/analyze', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+    
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Parse JSON response
+                        var response = JSON.parse(xhr.responseText);
+    
+                        // Update the #result-container with the analysis results and prediction
+                        document.getElementById('result-container').innerText = response.result;
+    
+                        // Create prediction element
+                        var predictionElement = document.createElement('p');
+                        predictionElement.innerText = 'Prediction: ' + response.prediction;
+    
+                        // Append prediction element to #result-container
+                        document.getElementById('result-container').appendChild(predictionElement);
+                    } else {
+                        // Handle error
+                        console.error('Error:', xhr.status);
+                    }
+                }
+            }; 
+    
+            // Convert form data to JSON
+            var jsonData = JSON.stringify(formData);
+    
+            // Send JSON data
+            xhr.send(jsonData);
+        }
+    </script>
+</body>
+
+</html>

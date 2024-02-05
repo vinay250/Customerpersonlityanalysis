@@ -15,10 +15,13 @@ def run_prediction_pipeline(data_path):
         model_path = 'E:/CustomerPersonalityAnalysis/artifacts/trained_model.pkl'
         model = joblib.load(model_path)
 
-        # Load the feature names
+        # Load feature names
         feature_names_path = 'E:/CustomerPersonalityAnalysis/artifacts/feature_names.pkl'
         feature_names = joblib.load(feature_names_path)
 
+        # Use the loaded feature names to select the relevant columns
+        X_prediction = transformed_data[feature_names]
+        
         # Ensure feature_names is a list
         if not isinstance(feature_names, list):
             raise ValueError("Feature names should be a list.")
@@ -26,8 +29,8 @@ def run_prediction_pipeline(data_path):
         # Set feature names for the model
         model.feature_names = feature_names
 
-        #Perform prediction
-        predictions = model.predict(transformed_data)
+        # Perform prediction
+        predictions = model.predict(X_prediction)
 
         # Output predictions (adjust this based on your needs)
         print("Predictions:", predictions)
